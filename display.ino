@@ -652,7 +652,7 @@ int h = 0;
   // sample data {"data":[[58,12290,3200,22],[-920,12287,6200,-700]]}
 
 
-  delay(settings.refresh1 * 1000);
+ // delay(settings.refresh1 * 1000);
 
   
 }

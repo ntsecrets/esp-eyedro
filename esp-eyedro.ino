@@ -1,5 +1,9 @@
 const int VERSION_MAJOR = 1;
-const int VERSION_MINOR = 00;
+const int VERSION_MINOR = 01;
+
+// this is a copy of a clock program for the esp8266 that I just modded to run 
+// an energy monitor - it polls it via json and displays it.  It has to handle negative and positive values.
+// it could be augmented to show the other values too like power factor, amps, volts etc but for now this will do.
 
 const char* www_username = "admin";
 const char* updatePath = "/fwupload";
@@ -54,6 +58,10 @@ int clockMode;
 //int wificonnects = 0;
 uint8_t setupdisp = 0;
 //bool synced = false;
+
+// this is for the kwh mode
+
+unsigned long lastpoll = 0;
 
 
 time_t firstSync = 0;
@@ -476,7 +484,16 @@ void loop() {
     if (millis() % 10 == 0 ) {
       ntp.addTime();
      // displayClock();
+     
+     if (millis() - lastpoll > settings.refresh1 * 1000) {
+     
      PollKwH();
+
+     lastpoll = millis();
+
+     }
+
+
       //connect wifi if not connected
       /*  if (WiFi.status() != WL_CONNECTED) {
          delay(1);
